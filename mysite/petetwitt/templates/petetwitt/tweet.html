@@ -1,0 +1,26 @@
+{% load date_diff %}
+
+<div class="tweet">
+  <table class="tweet_layout">
+	<tr>
+	  <td class="avatar">
+		<img src="{{ tweet.author.get_profile.portrait.url }}" width="48" height="48" class="avatar"/>
+	  </td>
+	  <td class="tweet_content">
+		<b>{{ tweet.author.first_name }} {{ tweet.author.last_name }}</b>
+        <span class="subtle"><a href="{% url 'profile' tweet.author.username %}">@{{ tweet.author.username }}</a> {{ tweet.timestamp }}</span><br />
+		<p>{{ tweet.body|safe }}</p>
+		<div class="tweet_buttons">
+          {% if logged_in_user.is_authenticated %}
+		  	<a href="#">Reply</a> &nbsp;&nbsp;
+		    <a href="#">Retweet</a> &nbsp;&nbsp;
+		    <a href="#">Favorite</a> &nbsp;&nbsp;
+            {% ifequal logged_in_user tweet.author %}
+		    	<a href="#">Delete</a> &nbsp;&nbsp;
+            {% endifequal %}
+          {% endif %}
+		</div>
+	  </td>
+	</tr>
+  </table>
+</div>

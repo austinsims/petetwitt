@@ -1,0 +1,10 @@
+
+{% extends "petetwitt/base.html" %}
+
+{% block content %}
+
+{% for tweet in tweets %}
+	{% include "petetwitt/tweet.html" %}
+{% endfor %}
+
+{% endblock %}

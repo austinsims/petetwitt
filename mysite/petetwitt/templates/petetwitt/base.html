@@ -1,0 +1,45 @@
+{% load url from future %}
+{% load staticfiles %}
+
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <!-- TODO: Change HREF to static content link -->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}base.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}profile.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}tweets.css" />
+    <script src="script.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <ul class="navbar">
+	    <li style="float:left"><a href="{% url 'latest_tweets' %}" class="navlink">Home</a></li>
+        {% if logged_in_user.is_authenticated %}
+        	<li style="float:left"><a href="#" class="navlink">Notifications</a></li>
+			<li style="float:left"><a href="{% url 'profile' logged_in_user.username %}" class="navlink">Me</a></li>
+        {% endif %}
+	
+	    <!-- <img src="logo.png" style="margin-left:50%; margin-right:50%; margin-bottom:0px; margin-top:0px;" /> -->
+
+	    <li style="float:right"><form><input type="text" value="search" /></form></li>
+	
+        {% if logged_in_user.is_authenticated %}
+	    	<li style="float:right"><a href="#" class="navlink">settings</a></li>
+			<li style="float:right"><a href="{% url 'logout' %}" class="navlink">logout</a></li>
+    	    <li style="float:right"><a href="{% url 'post' %}" class="navlink">post</a></li>
+        {% else %}
+			<li style="float:right"><a href="{% url 'login' %}" class="navlink">login</a></li>
+        {% endif %}
+      </ul>
+      
+    </div>
+    <div id="content" class="marginal">
+      {% block content %}{% endblock %}
+    </div>
+    <div id="footer" class="marginal">
+      Copyright 2014 Austin Sims, Elliott Mantock
+    </div>
+  </body>
+</html>
