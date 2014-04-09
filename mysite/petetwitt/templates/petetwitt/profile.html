@@ -4,18 +4,24 @@
 <div id="profile">
   <div id="profile_row">
 	<div id="profile_left">
+
+	  <h2>Followers</h2>
       {% if user.get_profile.count_followers > 0 %}
-	  	<h2>Followers</h2>
         {% for follower in user.get_profile.get_followers %}
         	<a href="{% url 'profile' follower.username %}">{{ follower }}</a><br/>
         {% endfor %}
+      {% else %}
+      <p>This is sad...  {{ user.first_name }} has no followers. At all.</p>
       {% endif %}
 
-      {% if user.get_profile.count_following > 0 %}
+
 	  	<h2>Following</h2>
+      {% if user.get_profile.count_following > 0 %}
 	    {% for following in user.get_profile.get_following %}
 	    	<a href="{% url 'profile' following.username %}">{{ following }}</a><br/>
 	    {% endfor %}
+      {% else %}
+      <p>{{ user.first_name }} is too awesome to take anyone else seriously.</p>
       {% endif %}
 
 	</div>
