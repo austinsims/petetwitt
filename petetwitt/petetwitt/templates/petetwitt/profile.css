@@ -1,0 +1,56 @@
+#profile {
+    display: table;
+}
+
+#profile_row {
+    display: table-row;
+}
+
+#profile_left {
+    display:table-cell;
+    width:30%;
+}
+
+#profile_right {
+    display:table-cell;
+    width:auto;
+}
+
+#profile_user {
+    text-align:center;
+    background-color:black;
+    color:white;
+    padding:1em;
+}
+
+#profile_tweets {
+
+}
+
+.profile_avatar {
+    height: 64px;
+    width: 64px;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    border: 3px solid white;
+}
+
+.profile_user_buttons {
+    padding-top:1em;
+    text-align:right;
+    text-transform:lowercase;
+}
+
+a.black_bg {
+    text-decoration:none;
+    color:white;
+}
+
+.profile_user_fullname {
+    font-size:2em;
+}
+
+.profile_user_username {
+    font-size:1.5em;
+}
