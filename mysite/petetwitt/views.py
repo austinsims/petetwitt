@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+import re
 
 def latest_tweets(request):
     tweets = reversed(Tweet.objects.order_by('timestamp'))
@@ -24,10 +25,17 @@ def post(request):
         form = TweetForm(request.POST)
         if form.is_valid():
             body = form.cleaned_data['body']
-            # TODO: check length. do this in form or something probably
-            # TODO: find and create or get hashtags
-            # TODO: find and create shoutouts
             tweet = request.user.tweet_authors.create(body=body)
+
+            # TODO: find and create or get hashtags
+            p = re.compile(r'#\w+')
+            for match in p.finditer(body):
+                name = body[m.start()+1:m.end()]
+                tweet.hashtags.create(name=name)
+
+            # TODO: find and create shoutouts
+
+            
                         
             return HttpResponseRedirect(reverse('latest_tweets'))
         else:

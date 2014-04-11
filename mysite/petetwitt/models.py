@@ -32,7 +32,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User) 
 
 class Hashtag(models.Model):
-    name = models.CharField(max_length=139)
+    name = models.CharField(max_length=139, unique=True)
 
     def __str__(self):
         return self.name
