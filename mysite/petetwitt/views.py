@@ -29,14 +29,22 @@ def post(request):
 
             # TODO: find and create or get hashtags
             p = re.compile(r'#\w+')
-            for match in p.finditer(body):
+            for m in p.finditer(body):
                 name = body[m.start()+1:m.end()]
-                tweet.hashtags.create(name=name)
+                hashtag, created = Hashtag.objects.get_or_create(name=name)
+                tweet.hashtags.add(hashtag)
 
             # TODO: find and create shoutouts
-
+            #import pdb; pdb.set_trace()
+            p = re.compile(r'@\w+')
+            for m in p.finditer(body):
+                username = body[m.start()+1:m.end()]
+                user = User.objects.get(username=username)
+                if user is not None:
+                    tweet.shoutouts.add(username)
             
-                        
+            tweet.save()
+                                    
             return HttpResponseRedirect(reverse('latest_tweets'))
         else:
             return render(request, 'petetwitt/post.html', {'form' : form, 'logged_in_user' : request.user})
