@@ -18,6 +18,14 @@ def strip_tags(html):
     return s.get_data()
 
 class TweetForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        body = ''
+        if 'body' in kwargs:
+            body = kwargs.pop('body')
+        super(TweetForm, self).__init__(*args, **kwargs)
+        self.fields['body'].initial = body
+
     body = forms.CharField(widget=forms.Textarea)
     
     #TODO picture upload input
