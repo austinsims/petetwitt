@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'logout/$', 'django.contrib.auth.views.logout', {'template_name' : 'petetwitt/logout.html' }, name='logout'),
     url(r'post/$', views.post, name='post'),
     url(r'reply/(?P<username>\w+)/$', views.reply, name='reply'),
+    url(r'follow/(?P<username>\w+)/$', views.follow, name='follow'),
+    url(r'unfollow/(?P<username>\w+)/$', views.unfollow, name='unfollow'),
     url(r'search/(?P<query>@?#?\w+)/$', views.search, name='search'),
     url(r'delete/(?P<pk>\d+)/$', views.TweetDelete.as_view(), name='tweet_delete'),
 )

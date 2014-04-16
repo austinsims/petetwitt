@@ -13,15 +13,35 @@ def latest_tweets(request):
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
+    following = user in request.user.get_profile().following.all()
     tweets = Tweet.objects.filter(author=user)
-    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets})
+    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following})
 
+@login_required
 def reply(request, username):
     return post(request, username=username)
 
 @login_required
+def follow(request, username):
+    profile = request.user.get_profile()
+    followed = get_object_or_404(User, username=username)
+    profile.following.add(followed)
+    return HttpResponseRedirect(reverse('profile', kwargs={'username' : username}))
+
+@login_required
+def unfollow(request, username):
+    import pdb; pdb.set_trace()
+    profile = request.user.get_profile()
+    followed = get_object_or_404(User, username=username)
+    profile.following.remove(followed)
+    profile.save()
+    return HttpResponseRedirect(reverse('profile', kwargs={'username' : username}))
+
+@login_required
 def post(request, **kwargs):
-    username = kwargs.pop('username')
+    username = None
+    if 'username' in kwargs:
+        username = kwargs.pop('username')
     if request.method == 'GET':
         if username is not None:
             form = TweetForm(body='@%s: ' % username)

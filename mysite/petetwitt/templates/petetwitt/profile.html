@@ -37,7 +37,11 @@
 			  <a href="#" class="black_bg">Edit profile</a> &nbsp;&nbsp;
 		      <a href="#" class="black_bg">change password</a> &nbsp;&nbsp;
 		  {% else %}
-			  <a href="#" class="black_bg">follow</a>
+              {% if following %}
+			    <a href="{% url 'unfollow' user.username %}" class="black_bg">unfollow</a>
+              {% else %}
+                <a href="{% url 'follow' user.username %}" class="black_bg">follow</a>  
+              {% endif %}
           {% endifequal %}
 	    </div>
 	  </div>
