@@ -30,7 +30,6 @@ def follow(request, username):
 
 @login_required
 def unfollow(request, username):
-    import pdb; pdb.set_trace()
     profile = request.user.get_profile()
     followed = get_object_or_404(User, username=username)
     profile.following.remove(followed)
