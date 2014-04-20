@@ -54,7 +54,7 @@ def post(request, **kwargs):
             body = form.cleaned_data['body']
             tweet = request.user.tweet_authors.create(body=body)
 
-            # TODO: find and create or get hashtags
+            # find and create or get hashtags
             p = re.compile(r'#\w+')
             for m in p.finditer(body):
                 st = m.start()
@@ -69,13 +69,21 @@ def post(request, **kwargs):
             # TODO: find and create shoutouts
             p = re.compile(r'@\w+')
             for m in p.finditer(body):
-                username = body[m.start()+1:m.end()]
+                st = m.start()
+                end = m.end()
+                username = body[st+1:end]
                 user = User.objects.get(username=username)
                 if user is not None:
                     # commented out due to bug
-                    #tweet.shoutouts.add(username)
-                    pass
+                    tweet.shoutouts.add(user)
+                link_prefix = '<a href="' + reverse(profile, kwargs={'username' : username}) + '">'
+                link_suffix = '</a>'
+                body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
 
+            # TODO: find and create hyperlinks
+            p = re.compile(r'^http\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$')
+            for m in p.finditer(body):
+                pass
             tweet.body = body
             tweet.save()
                                     
