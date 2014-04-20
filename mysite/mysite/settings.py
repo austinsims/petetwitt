@@ -124,7 +124,10 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'petetwitt',
     'south',
+    'registration',
 )
+
+REGISTRATION_OPEN = True
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
