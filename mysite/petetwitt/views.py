@@ -54,8 +54,7 @@ def post(request, **kwargs):
             tweet = request.user.tweet_authors.create(body=body)
 
             # find and create or get hashtags
-            p = re.compile(r'#\w+')
-
+            p = re.compile(r'(?<!color: )#(\w+)')
 
             pos = 0
             while True:
