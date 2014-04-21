@@ -34,8 +34,7 @@
 	    {{ user.get_profile.count_tweets }} Tweets, {{ user.get_profile.count_following }} Following, {{ user.get_profile.count_followers }} Followers<br/>
 	    <div class="profile_user_buttons">
           {% ifequal logged_in_user user %}
-			  <a href="#" class="black_bg">Edit profile</a> &nbsp;&nbsp;
-		      <a href="#" class="black_bg">change password</a> &nbsp;&nbsp;
+		      <a href="{% url 'auth_password_change' %}" class="black_bg">change password</a> &nbsp;&nbsp;
 		  {% else %}
               {% if following %}
 			    <a href="{% url 'unfollow' user.username %}" class="black_bg">unfollow</a>

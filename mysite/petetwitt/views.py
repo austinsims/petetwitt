@@ -43,7 +43,7 @@ def post(request, **kwargs):
         username = kwargs.pop('username')
     if request.method == 'GET':
         if username is not None:
-            form = TweetForm(body='@%s: ' % username)
+            form = TweetForm(body='@%s:&nbsp;' % username)
         else:
             form = TweetForm()
         return render(request, 'petetwitt/post.html', {'form' : form, 'logged_in_user' : request.user})
@@ -55,7 +55,7 @@ def post(request, **kwargs):
 
             # find and create or get hashtags
             p = re.compile(r'(?<!color: )#(\w+)')
-
+            
             pos = 0
             while True:
                 m = p.search(body, pos)

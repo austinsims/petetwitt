@@ -4,7 +4,11 @@
   <table class="tweet_layout">
 	<tr>
 	  <td class="avatar">
+        {% if tweet.author.get_profile.portrait %}
 		<img src="{{ tweet.author.get_profile.portrait.url }}" width="48" height="48" class="avatar"/>
+        {% else %}
+        <!-- TODO: display 'no avatar' image or something -->
+        {% endif %}
 	  </td>
 	  <td class="tweet_content">
 		<b>{{ tweet.author.first_name }} {{ tweet.author.last_name }}</b>
