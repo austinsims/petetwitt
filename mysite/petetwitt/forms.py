@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from HTMLParser import HTMLParser
 from petetwitt.models import *
 from registration.forms import RegistrationForm
+from tinymce.widgets import TinyMCE
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -27,7 +28,7 @@ class TweetForm(forms.Form):
         super(TweetForm, self).__init__(*args, **kwargs)
         self.fields['body'].initial = body
 
-    body = forms.CharField(widget=forms.Textarea)
+    body = forms.CharField(widget=TinyMCE(attrs={"cols":60, "rows": 5,}, mce_attrs={"theme":"advanced", "theme_advanced_buttons1":"bold,italic,underline,forecolor,fontsizeselect,fontselect"}))
     
     #TODO picture upload input
     

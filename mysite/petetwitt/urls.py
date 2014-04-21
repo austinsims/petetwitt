@@ -27,8 +27,9 @@ urlpatterns = patterns('',
     url(r'^unfollow/(?P<username>\w+)/$', views.unfollow, name='unfollow'),
     url(r'^search/(?P<query>@?#?\w+)/$', views.search, name='search'),
     url(r'^delete/(?P<pk>\d+)/$', views.TweetDelete.as_view(), name='tweet_delete'),
+    url(r'^tinymce/', include('tinymce.urls')),
+
 )
 
-blah = settings.MEDIA_URL
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
