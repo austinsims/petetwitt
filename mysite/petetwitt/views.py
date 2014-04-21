@@ -5,10 +5,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 import re
 
 def latest_tweets(request):
-    tweets = reversed(Tweet.objects.order_by('timestamp'))
+    """
+    List tweets from users the logged in user is following, or everyone if they're anonymous
+    """
+    q = Q()
+    if request.user.is_authenticated():
+        for u in request.user.get_profile().get_following():
+            q = q | Q(author=u)
+        tweets = reversed(Tweet.objects.filter(q).order_by('timestamp'))
+    else:
+        tweets = reversed(Tweet.objects.all().order_by('timestamp'))
     return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user})
 
 def directory(request):
