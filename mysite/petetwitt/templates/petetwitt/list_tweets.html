@@ -2,6 +2,7 @@
 {% extends "petetwitt/base.html" %}
 
 {% block head %}
+{% if enable_autorefresh %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript">
 var count;
@@ -23,7 +24,7 @@ $(document).ready(function(){
   setInterval(update, 1000);
 });
 </script>
-
+{% endif %}
 {% endblock %}
 
 {% block content %}

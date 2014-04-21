@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'south',
     'tinymce',
     'registration',
+    'django_enumfield',
 )
 
 REGISTRATION_OPEN = True
