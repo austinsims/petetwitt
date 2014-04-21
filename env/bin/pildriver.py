@@ -1,4 +1,4 @@
-#!/home/u88/sims4/petetwitt/env/bin/python
+#!/u/data/u88/sims4/clean/petetwitt/env/bin/python2.7
 """PILdriver, an image-processing calculator using PIL.
 
 An instance of class PILDriver is essentially a software stack machine
