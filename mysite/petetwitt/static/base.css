@@ -55,3 +55,7 @@ a:hover.navlink, a:active.navlink {
 ul.people_list {
     list-style-type:none;
 }
+
+.tiny {
+    font-size:60%;
+}

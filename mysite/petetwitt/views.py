@@ -13,11 +13,14 @@ def latest_tweets(request):
 
 def directory(request):
     users = User.objects.all()
-    return render(request, 'petetwitt/directory.html', {'users' : users})
+    return render(request, 'petetwitt/directory.html', {'users' : users, 'logged_in_user' : request.user})
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
-    following = user in request.user.get_profile().following.all()
+    if request.user.is_authenticated():
+        following = user in request.user.get_profile().following.all()
+    else:
+        following = False
     tweets = Tweet.objects.filter(author=user)
     return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following})
 
@@ -69,7 +72,6 @@ def post(request, **kwargs):
                     st = m.start()
                     end = m.end()
                     name = body[st+1:end]
-                    import pdb; pdb.set_trace()
                     hashtag, created = Hashtag.objects.get_or_create(name=name)
                     tweet.hashtags.add(hashtag)
                     link_prefix = '<a href="' + reverse(search, kwargs={'query' : name}) + '">'

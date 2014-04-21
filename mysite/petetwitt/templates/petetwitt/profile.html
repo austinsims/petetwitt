@@ -33,6 +33,7 @@
 	    Joined {{ user.date_joined }} <br/>
 	    {{ user.get_profile.count_tweets }} Tweets, {{ user.get_profile.count_following }} Following, {{ user.get_profile.count_followers }} Followers<br/>
 	    <div class="profile_user_buttons">
+          {% if logged_in_user.is_authenticated %}
           {% ifequal logged_in_user user %}
 		      <a href="{% url 'auth_password_change' %}" class="black_bg">change password</a> &nbsp;&nbsp;
 		  {% else %}
@@ -42,6 +43,7 @@
                 <a href="{% url 'follow' user.username %}" class="black_bg">follow</a>  
               {% endif %}
           {% endifequal %}
+          {% endif %}
 	    </div>
 	  </div>
 	  <div id="profile_tweets">

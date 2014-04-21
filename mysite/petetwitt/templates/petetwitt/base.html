@@ -28,7 +28,7 @@
     <div id="header">
       <ul class="navbar">
 	    <li style="float:left"><a href="{% url 'latest_tweets' %}" class="navlink">home</a></li>
-	    <li style="float:left"><a href="/users" class="navlink">directory</a></li>
+	    <li style="float:left"><a href="{% url 'directory' %}" class="navlink">directory</a></li>
         {% if logged_in_user.is_authenticated %}
         	<li style="float:left"><a href="#" class="navlink">notifications</a></li>
         {% endif %}
