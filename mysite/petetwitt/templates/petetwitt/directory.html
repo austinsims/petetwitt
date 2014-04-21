@@ -1,0 +1,9 @@
+{% extends "petetwitt/base.html" %}
+
+{% block content %}
+<h2>All users</h2>
+{% for user in users %}
+{{ user.first_name }} {{ user.last_name }} (<a href="{% url 'profile' user.username %}">{{ user.username }}</a>)<br />
+{% endfor %}
+
+{% endblock %}

@@ -11,6 +11,10 @@ def latest_tweets(request):
     tweets = reversed(Tweet.objects.order_by('timestamp'))
     return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user})
 
+def directory(request):
+    users = User.objects.all()
+    return render(request, 'petetwitt/directory.html', {'users' : users})
+
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     following = user in request.user.get_profile().following.all()
