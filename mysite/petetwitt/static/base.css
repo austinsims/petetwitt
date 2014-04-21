@@ -59,3 +59,11 @@ ul.people_list {
 .tiny {
     font-size:60%;
 }
+
+.read {
+    color:grey;
+}
+
+.unread {
+    color:auto;
+}

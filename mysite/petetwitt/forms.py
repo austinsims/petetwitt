@@ -23,12 +23,17 @@ class TweetForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         body = ''
+        in_reply_to = None
         if 'body' in kwargs:
             body = kwargs.pop('body')
+        if 'in_reply_to' in kwargs:
+            in_reply_to = kwargs.pop('in_reply_to')
         super(TweetForm, self).__init__(*args, **kwargs)
         self.fields['body'].initial = body
+        self.fields['in_reply_to'].initial = in_reply_to
 
     body = forms.CharField(widget=TinyMCE(attrs={"cols":60, "rows": 5,}, mce_attrs={"theme":"advanced", "theme_advanced_buttons1":"bold,italic,underline,forecolor,fontsizeselect,fontselect"}))
+    in_reply_to = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Tweet.objects.all(), required=False)
     
     #TODO picture upload input
     
@@ -37,6 +42,9 @@ class TweetForm(forms.Form):
         if len(strip_tags(form_data['body'])) > 140:
             raise forms.ValidationError("Tweet too long.")
         return form_data['body']
+
+    # def clean_in_reply_to(self):
+    #     return self.cleaned_data['in_reply_to']
             
 class CustomRegistrationForm(RegistrationForm):
     first_name = forms.CharField(widget=forms.TextInput(), label="First name")

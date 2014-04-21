@@ -1,0 +1,26 @@
+<div class="notification">
+<span class="{% if notification.unread %}unread{% else %}read{% endif %}">
+
+  <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender }}</a>
+
+{% ifequal notification.type 0 %}
+  mentioned you in a tweet:
+  {% with notification.tweet as tweet %}
+    {% include "petetwitt/tweet.html" %}
+  {% endwith %}
+{% endifequal %}
+
+{% ifequal notification.type 1 %}
+replied to your tweet. <a href="{% url 'conversation' notification.tweet.pk %}" class="tiny">view conversation</a>
+{% endifequal %}
+
+{% ifequal notification.type 2 %}
+  favorited your tweet
+{% endifequal %}
+
+{% ifequal notification.type 3 %}
+  followed you
+{% endifequal %}
+
+</span>
+</div>

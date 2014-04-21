@@ -159,3 +159,4 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE='petetwitt.Profile'
 
+ENABLE_AUTOREFRESH=False

@@ -1,5 +1,6 @@
 from petetwitt.models import *
 from petetwitt.forms import *
+from petetwitt import settings
 from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -19,7 +20,7 @@ def latest_tweets(request):
         tweets = reversed(Tweet.objects.filter(q).order_by('timestamp'))
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
-    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user})
+    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : settings.ENABLE_AUTOREFRESH })
 
 def directory(request):
     users = User.objects.all()
@@ -35,8 +36,8 @@ def profile(request, username):
     return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following})
 
 @login_required
-def reply(request, username):
-    return post(request, username=username)
+def reply(request, tweet_pk):
+    return post(request, in_reply_to_pk=tweet_pk)
 
 @login_required
 def follow(request, username):
@@ -55,12 +56,14 @@ def unfollow(request, username):
 
 @login_required
 def post(request, **kwargs):
-    username = None
-    if 'username' in kwargs:
-        username = kwargs.pop('username')
+    in_reply_to_pk = None
+    if 'in_reply_to_pk' in kwargs:
+        in_reply_to_pk = kwargs.pop('in_reply_to_pk')
     if request.method == 'GET':
-        if username is not None:
-            form = TweetForm(body='@%s:&nbsp;' % username)
+        if in_reply_to_pk is not None:
+            in_reply_to = get_object_or_404(Tweet, pk=in_reply_to_pk)
+            username = in_reply_to.author.username
+            form = TweetForm(body='@%s:&nbsp;' % username, in_reply_to=in_reply_to)
         else:
             form = TweetForm()
         return render(request, 'petetwitt/post.html', {'form' : form, 'logged_in_user' : request.user})
@@ -68,7 +71,16 @@ def post(request, **kwargs):
         form = TweetForm(request.POST)
         if form.is_valid():
             body = form.cleaned_data['body']
-            tweet = request.user.tweet_authors.create(body=body)
+            in_reply_to = form.cleaned_data['in_reply_to']
+            tweet = request.user.tweet_authors.create(body=body, in_reply_to=in_reply_to)
+
+            if tweet.in_reply_to is not None:
+                Notification.objects.create(
+                    type=NotificationType.REPLY,
+                    sender = request.user,
+                    recipient = in_reply_to.author,
+                    tweet = tweet,
+                )
 
             # find and create or get hashtags
             p = re.compile(r'(?<!color: )#(\w+)')
@@ -131,3 +143,20 @@ def search(request, query):
 
 def data(request):
     return HttpResponse('this is data from the server')
+
+def notifications(request):
+    notifications = Notification.objects.filter(recipient=request.user).order_by('timestamp')
+
+    # Generate response before marking notifications as read
+    response = render(request, 'petetwitt/notifications.html', {'logged_in_user' : request.user, 'notifications' : reversed(notifications)})
+
+    # TODO: fix read/unread rendering.
+
+    # Mark them all as read
+    for notification in notifications:
+        notification.unread = False
+
+    return response
+
+def conversation(request, last_tweet_pk):
+    return HttpResponse('not implemented')

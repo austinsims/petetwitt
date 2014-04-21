@@ -16,7 +16,7 @@
 		<p>{{ tweet.body|safe }}</p>
 		<div class="tweet_buttons">
           {% if logged_in_user.is_authenticated %}
-		  	<a href="{% url 'reply' tweet.author %}">Reply</a> &nbsp;&nbsp;
+		  	<a href="{% url 'reply' tweet.pk %}">Reply</a> &nbsp;&nbsp;
 		    <a href="#">Retweet</a> &nbsp;&nbsp;
 		    <a href="#">Favorite</a> &nbsp;&nbsp;
             {% ifequal logged_in_user tweet.author %}

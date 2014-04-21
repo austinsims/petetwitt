@@ -5,7 +5,6 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <!-- TODO: Change HREF to static content link -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}base.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}profile.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}tweets.css" />
@@ -21,6 +20,8 @@
       });
     </script>
 
+    <!-- TODO: auto-refresh to check for notification count -->
+
     {% block head %}{% endblock %}
 
   </head>
@@ -30,7 +31,7 @@
 	    <li style="float:left"><a href="{% url 'latest_tweets' %}" class="navlink">home</a></li>
 	    <li style="float:left"><a href="{% url 'directory' %}" class="navlink">directory</a></li>
         {% if logged_in_user.is_authenticated %}
-        	<li style="float:left"><a href="#" class="navlink">notifications</a></li>
+        	<li style="float:left"><a href="{% url 'notifications' %}" class="navlink">notifications</a></li>
         {% endif %}
 	
 	    <!-- <img src="logo.png" style="margin-left:50%; margin-right:50%; margin-bottom:0px; margin-top:0px;" /> -->

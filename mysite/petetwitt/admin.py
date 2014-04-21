@@ -4,3 +4,4 @@ from petetwitt.models import *
 admin.site.register(Profile)
 admin.site.register(Hashtag)
 admin.site.register(Tweet)
+admin.site.register(Notification)

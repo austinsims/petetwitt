@@ -1,0 +1,11 @@
+{% extends "petetwitt/base.html" %}
+
+{% block head %}
+<!-- TODO: auto-refresh when new notification arrives -->
+{% endblock %}
+
+{% block content %}
+{% for notification in notifications %}
+  {% include "petetwitt/notification.html"  %}
+{% endfor %}
+{% endblock %}
