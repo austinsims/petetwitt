@@ -107,5 +107,11 @@ class TweetDelete(generic.DeleteView):
             raise Http404
         return tweet
 
+def count(request):
+    return HttpResponse('%d' % Tweet.objects.count())
+
 def search(request, query):
     return HttpResponse('not implemented')
+
+def data(request):
+    return HttpResponse('this is data from the server')

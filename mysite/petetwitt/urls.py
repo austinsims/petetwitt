@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^search/(?P<query>@?#?\w+)/$', views.search, name='search'),
     url(r'^delete/(?P<pk>\d+)/$', views.TweetDelete.as_view(), name='tweet_delete'),
     url(r'^tinymce/', include('tinymce.urls')),
-
+    url(r'^count/$', views.count, name='count'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
