@@ -55,15 +55,24 @@ def post(request, **kwargs):
 
             # find and create or get hashtags
             p = re.compile(r'#\w+')
-            for m in p.finditer(body):
-                st = m.start()
-                end = m.end()
-                name = body[st+1:end]
-                hashtag, created = Hashtag.objects.get_or_create(name=name)
-                tweet.hashtags.add(hashtag)
-                link_prefix = '<a href="' + reverse(search, kwargs={'query' : name}) + '">'
-                link_suffix = '</a>'
-                body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
+
+
+            pos = 0
+            while True:
+                m = p.search(body, pos)
+                if m is None:
+                    break
+                else:
+                    st = m.start()
+                    end = m.end()
+                    name = body[st+1:end]
+                    import pdb; pdb.set_trace()
+                    hashtag, created = Hashtag.objects.get_or_create(name=name)
+                    tweet.hashtags.add(hashtag)
+                    link_prefix = '<a href="' + reverse(search, kwargs={'query' : name}) + '">'
+                    link_suffix = '</a>'
+                    body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
+                    pos = st + len(link_prefix) + (end-st) + len(link_suffix)
 
             # TODO: find and create shoutouts
             p = re.compile(r'@\w+')
