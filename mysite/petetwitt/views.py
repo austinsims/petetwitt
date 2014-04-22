@@ -109,7 +109,7 @@ def post(request, **kwargs):
                     name = body[st+1:end]
                     hashtag, created = Hashtag.objects.get_or_create(name=name)
                     tweet.hashtags.add(hashtag)
-                    link_prefix = '<a href="' + reverse(search) + '">'
+                    link_prefix = '<a href="' + reverse(search) + '?query=' + name + '">'
                     link_suffix = '</a>'
                     body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
                     pos = st + len(link_prefix) + (end-st) + len(link_suffix)
