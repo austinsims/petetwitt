@@ -68,3 +68,13 @@ class Notification(models.Model):
     recipient = models.ForeignKey(User, related_name='notication_recipient')
     tweet = models.ForeignKey(Tweet, related_name='notification_tweet', blank=True, null=True)
     unread = models.BooleanField(default=True)
+    def __str__(self):
+        if self.type == NotificationType.SHOUTOUT:
+            action = "mentioned"
+        elif self.type == NotificationType.REPLY:
+            action = "replied to"
+        elif self.type == NotificationType.FAVORITE:
+            action = "favorited a tweet of"
+        elif self.type == NotificationType.FOLLOW:
+            action = "followed"
+        return "%s %s %s." % (self.sender.username, action, self.recipient.username)

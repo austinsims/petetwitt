@@ -17,11 +17,15 @@
 		<div class="tweet_buttons">
           {% if logged_in_user.is_authenticated %}
 		  	<a href="{% url 'reply' tweet.pk %}">Reply</a> &nbsp;&nbsp;
-		    <a href="#">Retweet</a> &nbsp;&nbsp;
-		    <a href="#">Favorite</a> &nbsp;&nbsp;
+		    <!-- <a href="#">Retweet</a> &nbsp;&nbsp; -->
+		    <!-- <a href="#">Favorite</a> &nbsp;&nbsp; -->
             {% ifequal logged_in_user tweet.author %}
 		    	<a href="{% url 'tweet_delete' tweet.pk %}">Delete</a> &nbsp;&nbsp;
             {% endifequal %}
+          {% endif %}
+
+          {% if tweet.in_reply_to %}
+		    <a href="{% url 'conversation' tweet.pk %}">view conversation</a> &nbsp;&nbsp;
           {% endif %}
 		</div>
 	  </td>

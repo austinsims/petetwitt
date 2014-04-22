@@ -129,6 +129,7 @@ def post(request, **kwargs):
                     if user is not None:
                         if in_reply_to is not None and in_reply_to.author.pk is not user.pk:
                             tweet.shoutouts.add(user)
+
                             Notification.objects.create(
                                 type=NotificationType.SHOUTOUT,
                                 sender=request.user,
