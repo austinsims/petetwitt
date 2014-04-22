@@ -12,8 +12,8 @@ td.tweet_content {
 
 img.avatar {
     display:block;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left:1em;
+    margin-right:1em;
 }
 
 .tweet {
