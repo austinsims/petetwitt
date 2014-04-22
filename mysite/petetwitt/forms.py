@@ -32,7 +32,7 @@ class TweetForm(forms.Form):
         self.fields['body'].initial = body
         self.fields['in_reply_to'].initial = in_reply_to
 
-    body = forms.CharField(widget=TinyMCE(attrs={"cols":60, "rows": 5,}, mce_attrs={"theme":"advanced", "theme_advanced_buttons1":"bold,italic,underline,forecolor,fontsizeselect,fontselect"}))
+    body = forms.CharField(label='', widget=TinyMCE(attrs={"cols":60, "rows": 5,}, mce_attrs={"theme":"advanced", "theme_advanced_buttons1":"bold,italic,underline,forecolor,fontsizeselect,fontselect"}))
     in_reply_to = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Tweet.objects.all(), required=False)
     
     #TODO picture upload input

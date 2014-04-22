@@ -23,6 +23,7 @@ def latest_tweets(request):
         form = TweetForm()
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
+        form = None
     return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : settings.ENABLE_AUTOREFRESH, 'form' : form })
 
 def directory(request):
@@ -37,6 +38,10 @@ def profile(request, username):
         following = False
     tweets = Tweet.objects.filter(author=user)
     return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following})
+
+@login_required
+def my_profile(request):
+    return profile(request, request.user.username)
 
 @login_required
 def reply(request, tweet_pk):

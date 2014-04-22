@@ -29,16 +29,17 @@ $(document).ready(function(){
 
 {% block content %}
 
+{% if logged_in_user.is_authenticated %}
 <form action="{% url 'post'  %}" method="POST">
   {% csrf_token %}
-  <ul>
-    {{ form.as_p }}
-  </ul>
+  <table>
+  {{ form.as_p }}  
+  </table>
   <input type="submit" value="Tweet" />
 </form>
-
-
 <hr/>
+{% endif %}
+
 {% for tweet in tweets %}
 	{% include "petetwitt/tweet.html" %}
 {% endfor %}
