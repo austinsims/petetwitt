@@ -28,7 +28,6 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block content %}
-
 {% if logged_in_user.is_authenticated %}
 <form action="{% url 'post'  %}" method="POST">
   {% csrf_token %}
@@ -39,8 +38,11 @@ $(document).ready(function(){
 </form>
 <hr/>
 {% endif %}
-
-{% for tweet in tweets %}
-	{% include "petetwitt/tweet.html" %}
-{% endfor %}
+{% if tweets %}
+  {% for tweet in tweets %}
+  	{% include "petetwitt/tweet.html" %}
+  {% endfor %}
+{% else %}
+  There are no twitts to display.  Maybe you aren't following anyone? Try looking for some interesting users in the directory.
+{% endif %}
 {% endblock %}

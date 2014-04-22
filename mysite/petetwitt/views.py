@@ -15,11 +15,17 @@ def latest_tweets(request):
 
     Also show a form for making a new tweet
     """
+
+    import pdb; pdb.set_trace()
     q = Q()
     if request.user.is_authenticated():
-        for u in request.user.get_profile().get_following():
+        following = request.user.get_profile().get_following()
+        for u in following:
             q = q | Q(author=u)
-        tweets = reversed(Tweet.objects.filter(q).order_by('timestamp'))
+        if len(following) > 0:
+            tweets = reversed(Tweet.objects.filter(q).order_by('timestamp'))
+        else:
+            tweets = None
         form = TweetForm()
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
