@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import *
 from django.contrib.auth import *
 from django.db.models import Q
+from PIL import Image, ImageOps
 import re
 
 def latest_tweets(request):
@@ -88,11 +89,16 @@ def post(request, **kwargs):
             form = TweetForm()
         return render(request, 'petetwitt/post.html', {'form' : form, 'logged_in_user' : request.user})
     else:
-        form = TweetForm(request.POST)
+        form = TweetForm(request.POST, request.FILES)
         if form.is_valid():
             body = form.cleaned_data['body']
             in_reply_to = form.cleaned_data['in_reply_to']
             tweet = request.user.tweet_authors.create(body=body, in_reply_to=in_reply_to)
+
+            if 'picture' in request.FILES:
+                picture = request.FILES['picture']
+                tweet.picture = picture
+            
 
             if tweet.in_reply_to is not None:
                 Notification.objects.create(

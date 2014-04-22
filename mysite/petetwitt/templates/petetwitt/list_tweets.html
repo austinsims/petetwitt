@@ -29,7 +29,7 @@ $(document).ready(function(){
 
 {% block content %}
 {% if logged_in_user.is_authenticated %}
-<form action="{% url 'post'  %}" method="POST">
+<form action="{% url 'post'  %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <table>
   {{ form.as_p }}  
