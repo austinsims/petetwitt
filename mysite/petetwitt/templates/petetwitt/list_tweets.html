@@ -28,6 +28,17 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block content %}
+
+<form action="{% url 'post'  %}" method="POST">
+  {% csrf_token %}
+  <ul>
+    {{ form.as_p }}
+  </ul>
+  <input type="submit" value="Tweet" />
+</form>
+
+
+<hr/>
 {% for tweet in tweets %}
 	{% include "petetwitt/tweet.html" %}
 {% endfor %}

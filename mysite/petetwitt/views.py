@@ -12,15 +12,18 @@ import re
 def latest_tweets(request):
     """
     List tweets from users the logged in user is following, or everyone if they're anonymous
+
+    Also show a form for making a new tweet
     """
     q = Q()
     if request.user.is_authenticated():
         for u in request.user.get_profile().get_following():
             q = q | Q(author=u)
         tweets = reversed(Tweet.objects.filter(q).order_by('timestamp'))
+        form = TweetForm()
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
-    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : settings.ENABLE_AUTOREFRESH })
+    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : settings.ENABLE_AUTOREFRESH, 'form' : form })
 
 def directory(request):
     users = User.objects.all()
