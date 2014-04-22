@@ -229,16 +229,19 @@ def signup(request):
         return render(request, 'petetwitt/sign_up.html', {'form' : form, 'action' : reverse('signup')})
     else:
         form = RegForm(request.POST, request.FILES)
-        new_user = User.objects.create(
-            username = form.data['username'],
-            password = make_password(form.data['password']),
-            first_name = form.data['first_name'],
-            last_name = form.data['last_name']
-        )
-        new_profile = new_user.get_profile()
-        new_profile.portrait = request.FILES['portrait']
-        new_profile.save()
-        # TODO: log in user
-        u = authenticate(username=new_user.username, password=form.data['password'])
-        login(request, u)
-        return HttpResponseRedirect(reverse('profile', kwargs={'username' : new_user.username}))
+        if form.is_valid():
+            new_user = User.objects.create(
+                username = form.data['username'],
+                password = make_password(form.data['password']),
+                first_name = form.data['first_name'],
+                last_name = form.data['last_name']
+            )
+            new_profile = new_user.get_profile()
+            new_profile.portrait = request.FILES['portrait']
+            new_profile.save()
+            # TODO: log in user
+            u = authenticate(username=new_user.username, password=form.data['password'])
+            login(request, u)
+            return HttpResponseRedirect(reverse('profile', kwargs={'username' : new_user.username}))
+        else:
+            return render(request, 'petetwitt/sign_up.html', {'form' : form, 'action' : reverse('signup')})

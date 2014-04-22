@@ -65,6 +65,17 @@ user_registered.connect(user_created)
 class RegForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(), label="Username")
     password = forms.CharField(widget=forms.PasswordInput(), label="Password")
+    password_confirm = forms.CharField(widget=forms.PasswordInput(), label="Password (again)")
     first_name = forms.CharField(widget=forms.TextInput(), label="First name")
     last_name = forms.CharField(widget=forms.TextInput(), label="Last name")
     portrait = forms.ImageField(label="Portrait")
+
+    def clean_username(self):
+        if User.objects.filter(username=self.cleaned_data['username']).exists():
+            raise forms.ValidationError("User with that username already exists.")
+        else:
+            return self.cleaned_data['username']
+
+    def clean_password_confirm(self):
+        if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
+            raise forms.ValidationError("Passwords do not match.")
