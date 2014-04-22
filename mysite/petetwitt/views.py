@@ -39,13 +39,12 @@ def directory(request):
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
-    portrait_img_src = user.get_profile().portrait.url
     if request.user.is_authenticated():
         following = user in request.user.get_profile().following.all()
     else:
         following = False
     tweets = Tweet.objects.filter(author=user)
-    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following, 'portrait_img_src' : portrait_img_src})
+    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following, 'profile' : user.get_profile()})
 
 @login_required
 def my_profile(request):
