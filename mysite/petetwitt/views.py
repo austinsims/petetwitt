@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import *
+from django.contrib.auth import *
 from django.db.models import Q
 import re
 
@@ -229,19 +230,6 @@ def signup(request):
         return render(request, 'petetwitt/sign_up.html', {'form' : form, 'action' : reverse('signup')})
     else:
         form = RegForm(request.POST, request.FILES)
-        html = """
-        username: %s
-        pass: %s
-        fname: %s
-        lname: %s
-        image: <img src="%s" />
-        """ % (
-            form.data['username'],
-            form.data['password'],
-            form.data['first_name'],
-            form.data['last_name'],
-            "#"
-        )
         new_user = User.objects.create(
             username = form.data['username'],
             password = make_password(form.data['password']),
@@ -251,7 +239,7 @@ def signup(request):
         new_profile = new_user.get_profile()
         new_profile.portrait = request.FILES['portrait']
         new_profile.save()
-        return HttpResponse(html)
-        # log in user
-        new_user = None
-        #return HttpResponseRedirect(reverse('latest_tweets', kwargs={'logged_in_user' : new_user}))
+        # TODO: log in user
+        u = authenticate(username=new_user.username, password=form.data['password'])
+        login(request, u)
+        return HttpResponseRedirect(reverse('profile', kwargs={'username' : new_user.username}))
