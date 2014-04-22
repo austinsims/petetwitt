@@ -49,12 +49,22 @@ class TweetForm(forms.Form):
 class CustomRegistrationForm(RegistrationForm):
     first_name = forms.CharField(widget=forms.TextInput(), label="First name")
     last_name = forms.CharField(widget=forms.TextInput(), label="Last name")
+    portrait = forms.ImageField(required=False)
 
 def user_created(sender, user, request, **kwargs):
     form = CustomRegistrationForm(request.POST)
     user.first_name = form.data['first_name']
     user.last_name = form.data['last_name']
+    import pdb; pdb.set_trace()
     user.save()
 
 from registration.signals import user_registered
 user_registered.connect(user_created)
+
+
+class RegForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(), label="Username")
+    password = forms.CharField(widget=forms.PasswordInput(), label="Password")
+    first_name = forms.CharField(widget=forms.TextInput(), label="First name")
+    last_name = forms.CharField(widget=forms.TextInput(), label="Last name")
+    portrait = forms.ImageField(label="Portrait")

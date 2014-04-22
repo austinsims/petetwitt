@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import *
 from django.db.models import Q
 import re
 
@@ -29,7 +30,7 @@ def latest_tweets(request):
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
         form = None
-    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : settings.ENABLE_AUTOREFRESH, 'form' : form })
+    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : False, 'form' : form })
 
 def directory(request):
     users = User.objects.all()
@@ -37,12 +38,13 @@ def directory(request):
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
+    portrait_img_src = user.get_profile().portrait.url
     if request.user.is_authenticated():
         following = user in request.user.get_profile().following.all()
     else:
         following = False
     tweets = Tweet.objects.filter(author=user)
-    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following})
+    return render(request, 'petetwitt/profile.html', {'user' : user , 'logged_in_user' : request.user, 'tweets' : tweets, 'following' : following, 'portrait_img_src' : portrait_img_src})
 
 @login_required
 def my_profile(request):
@@ -220,3 +222,36 @@ def search(request):
     tweets = Tweet.objects.filter(q)
     
     return render(request, 'petetwitt/search_results.html', {'logged_in_user' : request.user, 'users' : users, 'tweets' : tweets })
+
+def signup(request):
+    if request.method == 'GET':
+        form = RegForm()
+        return render(request, 'petetwitt/sign_up.html', {'form' : form, 'action' : reverse('signup')})
+    else:
+        form = RegForm(request.POST, request.FILES)
+        html = """
+        username: %s
+        pass: %s
+        fname: %s
+        lname: %s
+        image: <img src="%s" />
+        """ % (
+            form.data['username'],
+            form.data['password'],
+            form.data['first_name'],
+            form.data['last_name'],
+            "#"
+        )
+        new_user = User.objects.create(
+            username = form.data['username'],
+            password = make_password(form.data['password']),
+            first_name = form.data['first_name'],
+            last_name = form.data['last_name']
+        )
+        new_profile = new_user.get_profile()
+        new_profile.portrait = request.FILES['portrait']
+        new_profile.save()
+        return HttpResponse(html)
+        # log in user
+        new_user = None
+        #return HttpResponseRedirect(reverse('latest_tweets', kwargs={'logged_in_user' : new_user}))
