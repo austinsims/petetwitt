@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block content %}
-{% for notification in notifications %}
-  {% include "petetwitt/notification.html"  %}
-{% endfor %}
+
+  {% for notification in notifications %}
+    {% include "petetwitt/notification.html"  %}
+  {% endfor %}
+
+
+
 {% endblock %}

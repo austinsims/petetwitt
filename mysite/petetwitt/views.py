@@ -101,32 +101,37 @@ def post(request, **kwargs):
                     name = body[st+1:end]
                     hashtag, created = Hashtag.objects.get_or_create(name=name)
                     tweet.hashtags.add(hashtag)
-                    link_prefix = '<a href="' + reverse(search, kwargs={'query' : name}) + '">'
+                    link_prefix = '<a href="' + reverse(search) + '">'
                     link_suffix = '</a>'
                     body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
                     pos = st + len(link_prefix) + (end-st) + len(link_suffix)
 
-            # TODO: find and create shoutouts
-            p = re.compile(r'@\w+')
-            for m in p.finditer(body):
-                st = m.start()
-                end = m.end()
-                username = body[st+1:end]
-                user = User.objects.get(username=username)
-                if user is not None:
-                    import pdb; pdb.set_trace()
-                    if in_reply_to is not None and in_reply_to.author.pk is not user.pk:
-                        tweet.shoutouts.add(user)
-                        Notification.objects.create(
-                            type=NotificationType.SHOUTOUT,
-                            sender=request.user,
-                            recipient=user,
-                            tweet=tweet,
-                        )
-                link_prefix = '<a href="' + reverse(profile, kwargs={'username' : username}) + '">'
-                link_suffix = '</a>'
-                body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
 
+            p = re.compile(r'@\w+')   
+            pos = 0
+            while True:
+                m = p.search(body, pos)
+                if m is None:
+                    break
+                else:
+                    st = m.start()
+                    end = m.end()
+                    username = body[st+1:end]
+                    user = User.objects.get(username=username)
+                    if user is not None:
+                        if in_reply_to is not None and in_reply_to.author.pk is not user.pk:
+                            tweet.shoutouts.add(user)
+                            Notification.objects.create(
+                                type=NotificationType.SHOUTOUT,
+                                sender=request.user,
+                                recipient=user,
+                                tweet=tweet,
+                            )
+                    link_prefix = '<a href="' + reverse(profile, kwargs={'username' : username}) + '">'
+                    link_suffix = '</a>'
+                    body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
+                    pos = st + len(link_prefix) + (end-st) + len(link_suffix)
+                
             # TODO: find and create hyperlinks
             p = re.compile(r'^http\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$')
             for m in p.finditer(body):
@@ -150,12 +155,10 @@ class TweetDelete(generic.DeleteView):
 def count(request):
     return HttpResponse('%d' % Tweet.objects.count())
 
-def search(request, query):
-    return HttpResponse('not implemented')
-
 def data(request):
     return HttpResponse('this is data from the server')
 
+@login_required
 def notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('timestamp')
 
@@ -170,8 +173,36 @@ def notifications(request):
 
     return response
 
-def conversation(request, last_tweet_pk):
-    return HttpResponse('not implemented')
+def conversation(request, pk):
+    convo = list()
+    tweet = get_object_or_404(Tweet, pk=int(pk))
+    convo.append(tweet)
+    while tweet.in_reply_to is not None:
+        tweet = tweet.in_reply_to
+        convo.append(tweet)
+
+    return render(request, 'petetwitt/conversation.html', {'convo' : convo, 'logged_in_user' : request.user})
 
 def tweet(request, pk):
     return HttpResponse('not implemented')
+
+def search(request):
+    query = request.GET['query']
+    words = [query[m.start():m.end()] for m in re.finditer(r'\w+', query)]
+
+    # Find users
+
+    q = Q()
+    for word in words:
+        q = q | Q(username__icontains=word) | Q(first_name__icontains=word) | Q(last_name__icontains=word)
+
+    users = User.objects.filter(q)
+
+    # Find tweets
+    q = Q()
+    for word in words:
+        q = q | Q(author__username__icontains=word) | Q(hashtags__name__icontains=word) | Q(body__icontains=word)
+
+    tweets = Tweet.objects.filter(q)
+    
+    return render(request, 'petetwitt/search_results.html', {'logged_in_user' : request.user, 'users' : users, 'tweets' : tweets })

@@ -1,5 +1,5 @@
-INSERT INTO auth_user VALUES(1,'pbkdf2_sha256$10000$v81hdOtR1C65$y+LdOTOUbrnMewCSkM+fXoUK/ZUsr3jeV99590nZ9Bc=','2014-04-21 23:53:31.796552',1,'root','Jesus','Christ','',1,1,'2014-04-16 03:23:46');
-INSERT INTO auth_user VALUES(2,'pbkdf2_sha256$10000$91HtcWXLshzg$fCjUwFOZPrtSUDaPTrfA90W3ld016fSDbsvwIuSvqz0=','2014-04-21 23:53:25.386715',0,'asims','Austin','Sims','',0,1,'2014-04-16 03:24:51');
+INSERT INTO auth_user VALUES(1,'pbkdf2_sha256$10000$v81hdOtR1C65$y+LdOTOUbrnMewCSkM+fXoUK/ZUsr3jeV99590nZ9Bc=','2014-04-21 23:59:46.101067',1,'root','Jesus','Christ','',1,1,'2014-04-16 03:23:46');
+INSERT INTO auth_user VALUES(2,'pbkdf2_sha256$10000$91HtcWXLshzg$fCjUwFOZPrtSUDaPTrfA90W3ld016fSDbsvwIuSvqz0=','2014-04-21 23:59:40.012250',0,'asims','Austin','Sims','',0,1,'2014-04-16 03:24:51');
 INSERT INTO auth_user VALUES(3,'pbkdf2_sha256$10000$PWKoa39J51aH$QdywUsBi4/B2IE9E1URocNsbAzVUu39qhR5ff+7bE0U=','2014-04-16 03:25:15',0,'elgatomantocko','Elliott','Mantock','',0,1,'2014-04-16 03:25:15');
 INSERT INTO auth_user VALUES(4,'pbkdf2_sha256$10000$KsavOqUeiASz$vSyXTnZoakY9TEMK0nvPFiNJUCdpHP59Sj4SFUus2Io=','2014-04-16 03:25:36',0,'cbell','Collin','Bell','',0,1,'2014-04-16 03:25:36');
 INSERT INTO auth_user VALUES(5,'pbkdf2_sha256$10000$ads9zVWGYdlB$TxOJcoMfTr1rMBAVFw2PypcAkmp2GBTYq0RCT0rVhI8=','2014-04-16 03:25:49',0,'karma','Rob','Sakhovnosky','',0,1,'2014-04-16 03:25:49');

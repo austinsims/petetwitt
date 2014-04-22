@@ -16,7 +16,8 @@
 {% endifequal %}
 
 {% ifequal notification.type 3 %}
-  followed you. <a href="{% url 'follow' notification.sender.username %}" class="tiny">follow back</a>
+  followed you.
+  {% if not notification.sender in logged_in_user.get_profile.following.all %}<a href="{% url 'follow' notification.sender.username %}" class="tiny">follow back</a>{% endif %}
 {% endifequal %}
 
 </span>

@@ -36,14 +36,19 @@
 	
 	    <!-- <img src="logo.png" style="margin-left:50%; margin-right:50%; margin-bottom:0px; margin-top:0px;" /> -->
 
-	    <li style="float:right"><form><input type="text" value="search" /></form></li>
+	    <li style="float:right">
+          <form action="/search/" method="GET">
+            <input type="text" name="query" />
+            <input type="submit" value="search" />
+          </form>
+        </li>
 	
         {% if logged_in_user.is_authenticated %}
             <li style="float:left"><a href="{% url 'profile' logged_in_user.username %}" class="navlink">me</a></li>
 			<li style="float:right"><a href="{% url 'logout' %}" class="navlink">logout</a></li>
     	    <li style="float:right"><a href="{% url 'post' %}" class="navlink">post</a></li>
         {% else %}
-			<li style="float:right"><a href="{% url 'login' %}" class="navlink">login</a></li>
+			<li style="float:right"><a href="{% url 'auth_login' %}" class="navlink">login</a></li>
 			<li style="float:right"><a href="/accounts/register/" class="navlink">create account</a></li>
         {% endif %}
       </ul>
