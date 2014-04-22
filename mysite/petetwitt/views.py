@@ -16,7 +16,6 @@ def latest_tweets(request):
     Also show a form for making a new tweet
     """
 
-    import pdb; pdb.set_trace()
     q = Q()
     if request.user.is_authenticated():
         following = request.user.get_profile().get_following()
