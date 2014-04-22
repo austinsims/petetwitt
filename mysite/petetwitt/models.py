@@ -66,5 +66,5 @@ class Notification(models.Model):
     type = enum.EnumField(NotificationType)
     sender = models.ForeignKey(User, related_name='notification_sender')
     recipient = models.ForeignKey(User, related_name='notication_recipient')
-    tweet = models.ForeignKey(Tweet, related_name='notification_tweet', blank=True)
+    tweet = models.ForeignKey(Tweet, related_name='notification_tweet', blank=True, null=True)
     unread = models.BooleanField(default=True)

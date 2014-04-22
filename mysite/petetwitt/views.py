@@ -44,6 +44,11 @@ def follow(request, username):
     profile = request.user.get_profile()
     followed = get_object_or_404(User, username=username)
     profile.following.add(followed)
+    Notification.objects.create(
+        type=NotificationType.FOLLOW,
+        sender=request.user,
+        recipient=followed,
+    )
     return HttpResponseRedirect(reverse('profile', kwargs={'username' : username}))
 
 @login_required
@@ -109,8 +114,15 @@ def post(request, **kwargs):
                 username = body[st+1:end]
                 user = User.objects.get(username=username)
                 if user is not None:
-                    # commented out due to bug
-                    tweet.shoutouts.add(user)
+                    import pdb; pdb.set_trace()
+                    if in_reply_to is not None and in_reply_to.author.pk is not user.pk:
+                        tweet.shoutouts.add(user)
+                        Notification.objects.create(
+                            type=NotificationType.SHOUTOUT,
+                            sender=request.user,
+                            recipient=user,
+                            tweet=tweet,
+                        )
                 link_prefix = '<a href="' + reverse(profile, kwargs={'username' : username}) + '">'
                 link_suffix = '</a>'
                 body = body[0:st] + link_prefix + body[st:end] + link_suffix + body[end:]
@@ -159,4 +171,7 @@ def notifications(request):
     return response
 
 def conversation(request, last_tweet_pk):
+    return HttpResponse('not implemented')
+
+def tweet(request, pk):
     return HttpResponse('not implemented')

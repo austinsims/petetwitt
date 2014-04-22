@@ -9,6 +9,7 @@ cd ..
 
 rm mysite/db.sqlite3
 yes 'no' | ./manage.py syncdb
+
 cd mysite
 cat users.sql | sqlite3 -echo db.sqlite3
 cd ..

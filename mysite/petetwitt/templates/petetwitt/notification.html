@@ -4,22 +4,19 @@
   <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender }}</a>
 
 {% ifequal notification.type 0 %}
-  mentioned you in a tweet:
-  {% with notification.tweet as tweet %}
-    {% include "petetwitt/tweet.html" %}
-  {% endwith %}
+  mentioned you in a <a href="{% url 'tweet' notification.tweet.pk  %}">tweet</a>.
 {% endifequal %}
 
 {% ifequal notification.type 1 %}
-replied to your tweet. <a href="{% url 'conversation' notification.tweet.pk %}" class="tiny">view conversation</a>
+  replied to your tweet. <a href="{% url 'conversation' notification.tweet.pk %}" class="tiny">view conversation</a>
 {% endifequal %}
 
 {% ifequal notification.type 2 %}
-  favorited your tweet
+  favorited your <a href="{% url 'tweet' notification.tweet.pk  %}">tweet</a>.
 {% endifequal %}
 
 {% ifequal notification.type 3 %}
-  followed you
+  followed you. <a href="{% url 'follow' notification.sender.username %}" class="tiny">follow back</a>
 {% endifequal %}
 
 </span>
