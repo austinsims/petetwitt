@@ -28,7 +28,7 @@
 	<div id="profile_right">
 	  <div id="profile_user">
         {% if profile.portrait %}
-	      <img src="{{ profile.portrait.url }}" class="profile_avatar" />
+	       <img src="{{ profile.portrait.url }}" class="profile_avatar" />
         {% endif %}
 	    <span class="profile_user_fullname">{{ user.first_name }} {{ user.last_name }}</span><br />
 	    <span class="profile_user_username">@{{ user.username }}</span> <br/>
@@ -38,6 +38,7 @@
           {% if logged_in_user.is_authenticated %}
           {% ifequal logged_in_user user %}
 		      <a href="{% url 'auth_password_change' %}" class="black_bg">change password</a> &nbsp;&nbsp;
+              <a href="{% url 'change_avatar' %}" class="black_bg">change avatar</a> &nbsp;&nbsp;
 		  {% else %}
               {% if following %}
 			    <a href="{% url 'unfollow' user.username %}" class="black_bg">unfollow</a>

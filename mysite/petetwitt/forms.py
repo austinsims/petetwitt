@@ -80,3 +80,7 @@ class RegForm(forms.Form):
     def clean_password_confirm(self):
         if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
             raise forms.ValidationError("Passwords do not match.")
+
+class AvatarForm(forms.Form):
+    avatar = forms.ImageField(label='')
+    

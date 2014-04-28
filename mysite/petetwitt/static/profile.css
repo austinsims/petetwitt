@@ -29,8 +29,8 @@
 }
 
 .profile_avatar {
-    height: 64px;
-    width: 64px;
+    height: 128px;
+    width: auto;
     display:block;
     margin-left:auto;
     margin-right:auto;

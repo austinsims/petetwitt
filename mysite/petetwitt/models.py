@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django_enumfield import enum
 from petetwitt import settings
-from stdimage import StdImageField
+from stdimage import StdImageField 
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
@@ -34,7 +34,7 @@ class Tweet(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile_user')
     following = models.ManyToManyField(User, related_name='profile_following', blank=True)
-    portrait = models.ImageField(upload_to='media')
+    portrait = StdImageField(upload_to='media', variations={'thumbnail' : (64,64)})
     favorites = models.ManyToManyField(Tweet, related_name='profile_favorites', blank=True)
 
     def __str__(self):

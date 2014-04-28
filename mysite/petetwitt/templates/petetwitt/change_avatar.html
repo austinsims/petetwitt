@@ -1,0 +1,11 @@
+{% extends "petetwitt/base.html" %}
+
+{% block content %}
+
+<form action="{{ action }}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Change avatar" />
+</form>
+
+{% endblock %}

@@ -32,7 +32,7 @@ def latest_tweets(request):
     else:
         tweets = reversed(Tweet.objects.all().order_by('timestamp'))
         form = None
-    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : False, 'form' : form })
+    return render(request, 'petetwitt/list_tweets.html', {'tweets' : tweets, 'logged_in_user' : request.user, 'enable_autorefresh' : True, 'form' : form })
 
 def directory(request):
     users = User.objects.all()
@@ -251,3 +251,20 @@ def signup(request):
             return HttpResponseRedirect(reverse('profile', kwargs={'username' : new_user.username}))
         else:
             return render(request, 'petetwitt/sign_up.html', {'form' : form, 'action' : reverse('signup')})
+
+@login_required
+def change_avatar(request):
+    if request.method == 'GET':
+        form = AvatarForm()
+        response = render(request, 'petetwitt/change_avatar.html', {'form' : form, 'action' : reverse('change_avatar'), 'logged_in_user' : request.user})
+    else:
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = request.user.get_profile()
+            profile.portrait = request.FILES['avatar']
+            profile.save()
+            response = HttpResponseRedirect(reverse('profile', kwargs={'username' : request.user.username}))
+        else:
+            response = render(request, 'petetwitt/change_avatar.html', {'form' : form, 'action' : reverse('change_avatar')})
+    return response
+    
