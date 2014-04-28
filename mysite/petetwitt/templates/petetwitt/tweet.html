@@ -15,7 +15,9 @@
         <span class="subtle"><a href="{% url 'profile' tweet.author.username %}">@{{ tweet.author.username }}</a> {{ tweet.timestamp }}</span><br />
 		<p>{{ tweet.body|safe }}</p>
         {% if tweet.picture %}
-          <img src="{{ tweet.picture.url }}" />
+          <a href="{{ tweet.picture.url }}">
+            <img src="{{ tweet.picture.thumbnail.url }}" />
+          </a>
         {% endif %}
 		<div class="tweet_buttons">
           {% if logged_in_user.is_authenticated %}

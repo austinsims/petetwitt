@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'tinymce',
     'registration',
     'django_enumfield',
+    'stdimage',
 )
 
 REGISTRATION_OPEN = True

@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django_enumfield import enum
-
+from petetwitt import settings
+from stdimage import StdImageField
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
@@ -22,8 +23,7 @@ class Tweet(models.Model):
     author = models.ForeignKey(User, related_name='tweet_authors')
     timestamp = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
-    picture = models.ImageField(blank=True, null=True, upload_to='media')
-    thumbnail = models.ImageField(blank=True, null=True, upload_to='media')
+    picture  = StdImageField(upload_to='media/', variations={'thumbnail': (256, 256)}, blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True, related_name='tweet_hashtags')
     shoutouts = models.ManyToManyField(User, blank=True, related_name='tweet_shoutouts')
     in_reply_to = models.ForeignKey('self', blank=True, null=True, related_name='tweet_in_reply_to')
