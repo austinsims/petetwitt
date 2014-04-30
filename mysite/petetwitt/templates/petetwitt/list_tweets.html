@@ -9,7 +9,7 @@ var count;
 
 function update() {
   $.get("{% url 'count' %}",function(data,status){
-    if (data > count) {
+    if (data != count) {
       location.reload(true)
     }
     count = data
